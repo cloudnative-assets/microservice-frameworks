@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationListener=com.ibm.epricer.svclib.data.DatabaseSupport
+org.springframework.context.ApplicationContextInitializer=com.ibm.epricer.svclib.rpc.RpcDependencyBuilder

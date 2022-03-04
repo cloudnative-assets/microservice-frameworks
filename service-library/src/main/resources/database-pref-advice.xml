@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:config>
+		<aop:advisor pointcut-ref="serviceOperation" advice-ref="txAdvicePref" order="1" />  <!-- Outer transaction -->
+	</aop:config>
+
+	<tx:advice id="txAdvicePref" transaction-manager="transManagerPref">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="com.ibm.epricer.svclib.BusinessRuleException" />
+		</tx:attributes>
+	</tx:advice>
+
+</beans>

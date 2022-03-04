@@ -1,0 +1,46 @@
+if: branch = master
+
+sudo: true
+
+git:
+  depth: false
+
+language: java
+
+jdk:
+  - oraclejdk11
+
+services:
+- docker
+
+install: 
+- echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">' > $HOME/.m2/settings.xml
+- echo '  <servers><server>' >> $HOME/.m2/settings.xml
+- echo '      <id>epricer.snapshots</id>' >> $HOME/.m2/settings.xml
+- echo '      <username>${env.ARTIFACTORY_USER}</username>' >> $HOME/.m2/settings.xml
+- echo '      <password>${env.ARTIFACTORY_PWD}</password>' >> $HOME/.m2/settings.xml
+- echo '  </server><server>' >> $HOME/.m2/settings.xml
+- echo '      <id>epricer.releases</id>' >> $HOME/.m2/settings.xml
+- echo '      <username>${env.ARTIFACTOTY_USER}</username>' >> $HOME/.m2/settings.xml
+- echo '      <password>${env.ARTIFACTOTY_PWD}</password>' >> $HOME/.m2/settings.xml
+- echo '  </server></servers>' >> $HOME/.m2/settings.xml
+- echo '  <profiles><profile>' >> $HOME/.m2/settings.xml
+- echo '    <id>default</id>' >> $HOME/.m2/settings.xml
+- echo '    <activation><activeByDefault>true</activeByDefault></activation>' >> $HOME/.m2/settings.xml
+- echo '    <properties><altSnapshotDeploymentRepository>${env.DEPLOYMENT_REPO}</altSnapshotDeploymentRepository></properties>' >> $HOME/.m2/settings.xml
+- echo '    <repositories><repository>' >> $HOME/.m2/settings.xml
+- echo '    <id>snapshot</id>' >> $HOME/.m2/settings.xml
+- echo '       <name>DEV Repository for Snapshots</name>' >> $HOME/.m2/settings.xml
+- echo '       <url>${env.ARTIFACTORY_SNAPSHOT_URL}</url>' >> $HOME/.m2/settings.xml
+- echo '    </repository><repository>' >> $HOME/.m2/settings.xml
+- echo '    <id>releases</id>' >> $HOME/.m2/settings.xml
+- echo '       <name>Repository for Releases</name>' >> $HOME/.m2/settings.xml
+- echo '       <url>${env.ARTIFACTORY_RELEASE_URL}</url>' >> $HOME/.m2/settings.xml
+- echo '    </repository></repositories>' >> $HOME/.m2/settings.xml
+- echo '  </profile></profiles>' >> $HOME/.m2/settings.xml
+- echo '</settings>' >> $HOME/.m2/settings.xml
+- cat $HOME/.m2/settings.xml
+- cd service-library
+- chmod +x mvnw
+
+script: mvn clean deploy

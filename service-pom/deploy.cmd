@@ -1,0 +1,1 @@
+@mvn clean deploy -DskipDockerPush=true -DskipMavenDeploy=false
